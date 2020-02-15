@@ -1,16 +1,14 @@
 module.exports = {
     Query: {
-        categories: (root, args, context) => ([{
-            id: '1234',
-            name: 'Cat1',
-            ko: 'ERR'
-        }]),
-        keywords: (root, args, context) => {
-            return [{
-                word: 'Celerio',
-                id: '12345',
-                score: 12345
-            }]
+        keywords: async (_, {pageSize = 10, category}, {dataSources}) => {
+            const keywordsByCategory = await dataSources.keywordsApi.getKeywords({category, pageSize});
+            return keywordsByCategory;
+        }
+    },
+    Mutation: {
+        deleteKeyword: async (_, {keyword}, {dataSources}) => {
+            const result = await dataSources.keywordsApi.deleteKeyword(keyword);
+            return !result ? true : false;
         }
     }
 }
