@@ -14,3 +14,6 @@ This repo follows a monorepo structure. Doing `yarn install` at the root level w
 `cd modules/client` and `npm start` starts the client webpack server on `localhost:3000`
 
 ## Explanation of architecture
+I have used apollo-server at the backend. Since the datamuse REST api is read-only, all the Graph Mutations are performed on the data stored in an sqlite database table. So the flow is like this - 
+1. Once the GraphQL server receives a query from apollo-client, it first checks in the sqlite table if the requested data exists. If yes, it sends this data to the client. If not, it makes a new request to the Datamuse REST api and stores this data in sqlite.
+2. All the Graph Mutations are performed on the data in the sqlite table
