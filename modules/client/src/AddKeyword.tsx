@@ -8,13 +8,15 @@ interface FormValues {
 }
 
 interface Props {
-    submit: (values: FormValues) => Promise<FormikErrors<FormValues> | null>
+    submit: (values: FormValues) => Promise<FormikErrors<FormValues> | null>,
+    category: string
 }
 
 const AddKeyword: React.FC<FormikProps<FormValues> & Props> = (props) => {
     const {values, handleSubmit, errors} = props;
+    console.log(values);
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="add-details-form">
             <div style={{width: 400}}>
                 <Form className="add-category-form">
                     <Form.Item>
@@ -44,7 +46,7 @@ const AddKeyword: React.FC<FormikProps<FormValues> & Props> = (props) => {
 }
 
 export const AddKeywordWrapper = withFormik<Props, FormValues>({
-    mapPropsToValues: () => ({keyword: "", category: ""}),
+    mapPropsToValues: (props) => ({keyword: "", category: props.category}),
     handleSubmit: async (values, {props, setErrors}) => {
         const errors = await props.submit(values);
         if(errors) {

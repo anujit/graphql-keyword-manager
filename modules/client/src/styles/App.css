@@ -1,0 +1,12 @@
+.main-wrapper {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.form-wrapper {
+    display: flex;
+}
+
+.add-details-form {
+    padding: 10px;
+}

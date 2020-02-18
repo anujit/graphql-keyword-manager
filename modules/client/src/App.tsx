@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import KeywordsTable from './KeywordsTable';
 import {AddCategoryWrapper} from './AddCategory';
 import {AddKeywordWrapper} from './AddKeyword';
+import './styles/App.css';
 
 const {Content} = Layout;
 
@@ -45,18 +46,6 @@ const App: React.FC<{}> = (props) => {
   }
 
   const {keywords = []} = data;
-  // const getKeywords = ():[] => [];
-  // let keywords = getKeywords();
-  // const handleAddCategory = async (values: any) => {
-  //   console.log(values);
-  //   const {category} = values;
-  //   const {loading, error, data} = useQuery(GET_KEYWORDS_BY_CATEGORY, {
-  //     variables: { category: 'bikes' },
-  //   });    
-  //   console.log(data);
-  //   keywords = data;
-  //   return null;
-  // }
 
   const handleAddSubmit = async (values: any) => {
     console.log(values);
@@ -64,13 +53,13 @@ const App: React.FC<{}> = (props) => {
   }
 
   return (
-    <Layout style={{ padding: '0 24px 24px' }}>
+    <Layout className="main-wrapper">
       <Content>
         <KeywordsTable keywords={keywords} />
       </Content>
-      <Content>
-        <AddCategoryWrapper submit={handleAddCategory} />
-        <AddKeywordWrapper submit={handleAddSubmit} />      
+      <Content className="form-wrapper">
+        <AddCategoryWrapper submit={handleAddSubmit} />
+        <AddKeywordWrapper submit={handleAddSubmit} category="bikes" />
       </Content>      
     </Layout>
   );
