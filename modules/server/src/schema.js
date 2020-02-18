@@ -9,16 +9,21 @@ const typeDefs = gql`
     type Keyword {
         word: String
         score: Int
-        category: String
+    }
+
+    type DeleteCategoryResponse {
+        success: Boolean!
+        name: String
     }
 
     type Query {
-        categories: [Category]!
+        category(categoryName: String): Category
         keywords(category: String!): [Keyword]!
     }
 
     type Mutation {
         deleteKeyword(keyword: String!) : Boolean
+        deleteCategory(categoryName: String!) : DeleteCategoryResponse
     }
 `;
 

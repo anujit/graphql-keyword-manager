@@ -4,11 +4,13 @@ const resolvers = require('./resolvers');
 const {createStore} = require('./store');
 
 const KeywordsAPI = require('./datasources/keywords');
+const CategoryApi = require('./datasources/category');
 
 const store = createStore();
 
 const dataSources = () => ({
-    keywordsApi: new KeywordsAPI({store})
+    keywordsApi: new KeywordsAPI({store}),
+    categoryApi: new CategoryApi()
 })
 
 const server = new ApolloServer({
