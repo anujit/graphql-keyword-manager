@@ -11,7 +11,7 @@ interface Props {
 }
 
 const AddCategory: React.FC<FormikProps<FormValues> & Props> = (props) => {
-    const {values, handleSubmit, errors} = props;
+    const {values, handleSubmit, handleChange} = props;
     return (
         <form onSubmit={handleSubmit} className="add-details-form">
             <div>
@@ -20,6 +20,7 @@ const AddCategory: React.FC<FormikProps<FormValues> & Props> = (props) => {
                             <Input
                                 name="category"
                                 placeholder="Category"
+                                onChange={handleChange}
                                 value={values.category}
                             />
                     </Form.Item>
