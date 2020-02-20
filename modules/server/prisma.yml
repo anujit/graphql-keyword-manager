@@ -1,0 +1,10 @@
+endpoint: https://eu1.prisma.sh/anujit-nene-b2d6e5/server/dev
+datamodel: datamodel.prisma
+
+generate:
+  - generator: typescript-client
+    output: ./generated/prisma-client/
+
+hooks:
+  post-deploy:
+    - prisma generate

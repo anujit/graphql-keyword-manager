@@ -1,0 +1,12 @@
+type Category {
+  id: ID! @id
+  name: String!
+  keywords: [Keyword]
+}
+
+type Keyword {
+  id: ID! @id
+  word: String!
+  score: Int
+  category: Category @relation(link: INLINE)
+}
