@@ -3,11 +3,12 @@ import { Table, Tag, Modal, Divider } from 'antd';
 import gql from 'graphql-tag';
 import 'antd/dist/antd.css';
 import { useMutation } from '@apollo/react-hooks';
+import {GET_CATEGORIES} from './App';
 
 const {confirm} = Modal;
 
 interface IKeywordsTableProps {
-    categories: Array<Category | null>
+    categories: Array<Category>
 }
 
 type Keyword = {
@@ -31,12 +32,35 @@ export const DELETE_KEYWORD = gql`
     }
 `;
 
+export const DELETE_CATEGORY = gql`
+    mutation DeleteCategory($categoryId: ID!) {
+        deleteCategory(categoryId: $categoryId) {
+            id,
+            name
+        }
+    }
+`;
 
 const CategoryTable: React.FC<IKeywordsTableProps> = (props) => {
     const {categories} = props;
 
     const [deleteKeyword] = useMutation(DELETE_KEYWORD, {
         refetchQueries: ['GetCategories']
+    });
+
+    const [deleteCategory] = useMutation(DELETE_CATEGORY, {
+        update(cache, {
+            data: {deleteCategory}
+          }) {
+            const {categories} = cache.readQuery<any, any>({query: GET_CATEGORIES});
+            console.log(categories, deleteCategory);
+            cache.writeQuery({
+              query: GET_CATEGORIES,
+              data: {
+                  categories: categories.filter((category:Category) => category.id !== deleteCategory.id)
+                },
+            });
+          }        
     });
 
     const columns = [{
@@ -53,7 +77,7 @@ const CategoryTable: React.FC<IKeywordsTableProps> = (props) => {
             <p>
                 {
                     keywords.map(keyword => {
-                        return <Tag onClick={() => showConfirm(keyword)}>{keyword.word}</Tag>;
+                        return <Tag onClick={() => showConfirmKeyword(keyword)}>{keyword.word}</Tag>;
                     })
                 }
             </p>
@@ -62,16 +86,16 @@ const CategoryTable: React.FC<IKeywordsTableProps> = (props) => {
     {
         title: 'Actions',
         key: 'action',
-        render: () => (
+        render: (text: any, record: any) => (
           <span>
             <a>Add Keyword</a>
             <Divider type="vertical" />
-            <a>Delete Category</a>
+            <a onClick={() => showConfirmCategory(record)}>Delete Category</a>
           </span>
         ),
       }];
     
-    const showConfirm = (keyword: Keyword) => {
+    const showConfirmKeyword = (keyword: Keyword) => {
         confirm({
             title: `Do you want to delete the keyword '${keyword.word}'?`,
             onOk() {
@@ -83,6 +107,20 @@ const CategoryTable: React.FC<IKeywordsTableProps> = (props) => {
             },
             onCancel() {},
           });        
+    }
+
+    const showConfirmCategory = (category : Category) => {
+        confirm({
+            title: `Do you want to delete the category '${category.name}'?`,
+            onOk() {
+                deleteCategory({
+                    variables: {
+                        categoryId: category.id
+                    }
+                });
+            },
+            onCancel() {},
+          }); 
     }
 
     return <Table columns={columns} dataSource={categories} />
