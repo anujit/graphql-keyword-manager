@@ -1,24 +1,16 @@
-const {ApolloServer} = require('apollo-server');
-const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
-const {createStore} = require('./store');
+const { GraphQLServer } = require('graphql-yoga');
+const { prisma } = require('../generated/prisma-client/');
 
-const KeywordsAPI = require('./datasources/keywords');
-const CategoryApi = require('./datasources/category');
+const TYPE_DEFS_PATH = './schema.graphql';
 
-const store = createStore();
-
-const dataSources = () => ({
-    keywordsApi: new KeywordsAPI({store}),
-    categoryApi: new CategoryApi()
-})
-
-const server = new ApolloServer({
-    typeDefs, 
+const server = new GraphQLServer({
+    typeDefs: TYPE_DEFS_PATH,
     resolvers,
-    dataSources
-});
+    context: request => ({
+        ...request,
+        prisma
+    }),
+  })
 
-server.listen().then(({url}) => {
-    console.log(`🚀 Server ready at ${url}`);
-})
+server.start({port: 4001}, ({port}) => console.log(`Server running on port ${port}`));

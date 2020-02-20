@@ -1,25 +1,15 @@
-const {RESTDataSource} = require('apollo-datasource-rest');
+const fetch = require('node-fetch');
+const baseURL = 'https://api.datamuse.com/words?ml='
 
-class CategoryApi extends RESTDataSource {
-    constructor() {
-        super();
-        this.baseURL = 'https://api.datamuse.com/';
-    }
-    
-    async getCategory ({categoryName, pageSize}) {   
-        const response = await this.get('words', {
-            ml: categoryName,
-            max: pageSize
-        });
-        return response;
-    }
 
-    async deleteCategory (categoryName) {
-        return {
-            success: true,
-            name: categoryName
-        }
-    }
+async function fetchKeywords(root, args) {
+    const {name} = args;
+    const response = await fetch(`${baseURL}${name}&max=10`);
+    console.log(typeof response);
+    let data = await response.json();
+    return data;
 }
 
-module.exports = CategoryApi;
+module.exports = {
+    fetchKeywords
+}

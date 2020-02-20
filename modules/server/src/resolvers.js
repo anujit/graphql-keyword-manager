@@ -1,25 +1,65 @@
+const CategoryDataSource = require('./datasources/category');
+
 module.exports = {
     Query: {
-        keywords: async (_, {pageSize = 10, category}, {dataSources}) => {
-            const keywordsByCategory = await dataSources.keywordsApi.getKeywords({category, pageSize});
-            return keywordsByCategory;
-        },
-        category: async (_, {pageSize = 10, categoryName}, {dataSources}) => {
-            const keywords = await dataSources.categoryApi.getCategory({
-                categoryName,
-                pageSize
-            })
-            return {name: categoryName, keywords};
+        categories : async (_, args, {prisma}) => {
+            return await prisma.categories();
         }
     },
     Mutation: {
-        deleteKeyword: async (_, {keyword}, {dataSources}) => {
-            const result = await dataSources.keywordsApi.deleteKeyword(keyword);
-            return !result ? true : false;
+        createCategory: async (_, {pageSize = 10, name}, {prisma}) => {
+            const keywords = await CategoryDataSource.fetchKeywords(_, {name, pageSize});
+            const category = await prisma.createCategory({
+                name,
+                keywords: {
+                  create: keywords.map(keyword => {
+                    const {word, score} = keyword;
+                    return {
+                      word,
+                      score
+                    }
+                  })
+                }
+              });
+              console.log('category', category);
+              return category;
         },
-        deleteCategory: async (_, {x}, {dataSources}) => {
-            const result = await dataSources.categoryApi.deleteCategory(x);
-            return result;
-        }        
-    }
+        createKeyword: async (_, {name, categoryId, score = 10000}, {prisma}) => {
+            return await prisma.createKeyword({
+                word: name,
+                score,
+                category: {
+                    connect: {id: categoryId}
+                }
+            });
+        },
+        deleteCategory: async (_, {categoryId}, {prisma}) => {
+            return await prisma.deleteCategory({
+                id: categoryId
+            });
+        },
+        deleteKeyword: async (_, {keywordId}, {prisma}) => {
+            return await prisma.deleteKeyword({
+                id: keywordId
+            });
+        }
+    },
+    Category: {
+        keywords (root, args, context) {
+            return context.prisma
+            .category({
+                id: root.id,
+            })
+            .keywords()
+      },
+    },
+    Keyword: {
+      category(root, args, context) {
+        return context.prisma
+          .post({
+            id: root.id,
+          })
+          .category()
+      }
+    }    
 }
