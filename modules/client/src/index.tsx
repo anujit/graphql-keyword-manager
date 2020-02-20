@@ -4,11 +4,11 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './components/App';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: 'http://localhost:4000/'
+  uri: 'http://localhost:4001/'
 });
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
