@@ -16,28 +16,26 @@ const AddCategory: React.FC<FormikProps<FormValues> & Props> = (props) => {
     const {values, handleSubmit, handleChange} = props;
     return (
             <Content>
-            <Card className="add-category-card" title="Create A New Category">
-            <form onSubmit={handleSubmit} className="add-details-form">
-                <div>
-                    <Form className="add-category-form">
-                        <Form.Item>
+                <Card className="add-category-card" title="Create A New Category">
+                    <form onSubmit={handleSubmit} className="add-details-form">
+                        <div>
+                            <Form.Item>
                                 <Input
                                     name="category"
                                     placeholder="Category"
                                     onChange={handleChange}
                                     value={values.category}
                                 />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">
-                                Add Category
-                            </Button>
-                        </Form.Item>                    
-                    </Form>
-                </div>
-            </form>
-        </Card>                
-            </Content>
+                            </Form.Item>
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit">
+                                    Add Category
+                                </Button>
+                            </Form.Item>
+                        </div>
+                    </form>
+                </Card>
+        </Content>
     );
 }
 

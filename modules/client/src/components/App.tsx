@@ -1,76 +1,9 @@
 import React from 'react';
-import gql from 'graphql-tag';
 import {Layout, Spin} from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { graphql } from '@apollo/react-hoc';
-import {compose} from 'recompose';
-import CategoryTable from './CategoryTable';
-import {AddCategoryWrapper} from './AddCategory';
+import {GET_CATEGORIES, CREATE_CATEGORY} from '../queries';
+import AppMainView from './App.mainView';
 import '../styles/App.css';
-
-const {Header, Content} = Layout;
-
-export const GET_CATEGORIES = gql`
-  query GetCategories {
-    categories {
-      id,
-      name,
-      keywords{
-        id,
-        word,
-        score
-      }
-    }
-  }
-`;
-
-const CREATE_CATEGORY = gql`
-  mutation CreateCategory(
-    $categoryName: String!
-  ){
-    createCategory(name: $categoryName) {
-      id,
-      name
-      keywords {
-        id,
-        word,
-        score
-      }      
-    }
-  }
-`;
-
-const withQuery = graphql(gql`
-query GetCategories {
-  categories{
-    id,
-    name,
-    keywords{
-      id,
-      word,
-      score
-    }
-  }
-}`, {
-  name: 'comp1'
-})
-
-const withMutation = graphql(gql`
-mutation CreateCategory(
-  $categoryName: String!
-){
-  createCategory(name: $categoryName) {
-    id,
-    name
-    keywords {
-      id,
-      word,
-      score
-    }      
-  }
-}`, {
-  name: 'comp2'
-});
 
 const App: React.FC<any> = (props) => {
   const { loading, error, data } = useQuery(GET_CATEGORIES);
@@ -109,21 +42,8 @@ const App: React.FC<any> = (props) => {
   if (error) return <p>Error in Loading Categories...</p>;
 
   return (
-    <Layout className="main-wrapper">
-      <Header className="main-header">Keyword Manager</Header>
-      <Content>
-        <CategoryTable categories={data.categories} />
-      </Content>
-      <Content className="form-wrapper">
-        <AddCategoryWrapper submit={handleAddSubmit} />
-      </Content>      
-    </Layout>
+    <AppMainView data={data} handleAddSubmit={handleAddSubmit} />
   );
 }
 
 export default App;
-
-// export default compose(
-//   withMutation,
-//   withQuery
-// )(App);

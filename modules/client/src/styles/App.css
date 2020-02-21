@@ -26,3 +26,7 @@
 /* .add-category-card {
     width: 800px;;
 } */
+
+.keyword-tag {
+    cursor: pointer;
+}
