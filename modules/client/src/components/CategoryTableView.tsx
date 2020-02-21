@@ -1,8 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { Table, Tag, Modal, Divider } from 'antd';
 import AddKeywordView from './AddKeywordView';
-
-const {confirm} = Modal;
 
 type Category = {
     name: String,
@@ -23,10 +21,14 @@ interface ICategoryTableViewProps {
     categories: Array<Category>
 }
 
-const CategoryTableView: React.FC<ICategoryTableViewProps> = (props) => {
-    const {deleteCategory, deleteKeyword, categories, addKeyword} = props;
-    const [isVisible, setIsVisible] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<any>(null);
+const CategoryTableView: React.FC<any> = (props) => {
+    const {
+        showConfirmKeyword, 
+        showConfirmCategory, 
+        showAddKeywordModal, 
+        onSubmitKeyword, 
+        categories
+    } = props;
 
     const columns = [
         {
@@ -59,62 +61,19 @@ const CategoryTableView: React.FC<ICategoryTableViewProps> = (props) => {
                     <a onClick={() => showConfirmCategory(record)}>Delete Category</a>
                 </span>
         ),}
-    ];    
-    const showConfirmKeyword = (keyword: Keyword, category: Category) => {
-        confirm({
-            title: `Do you want to delete the keyword '${keyword.word}'?`,
-            onOk() {
-                deleteKeyword({
-                    variables: {
-                        keywordId: keyword.id
-                    }
-                });
-            },
-            onCancel() {},
-        });        
-    }
-        
-    const showConfirmCategory = (category : Category) => {
-        confirm({
-            title: `Do you want to delete the category '${category.name}'?`,
-            onOk() {
-                deleteCategory({
-                    variables: {
-                        categoryId: category.id
-                    }
-                });
-            },
-            onCancel() {},
-        }); 
-    }
-    
-    const showAddKeywordModal = (category : Category) => {
-        setSelectedCategory(category);
-        setIsVisible(!isVisible);
-    }
-
-    const onSubmitKeyword = async (values: any) => {
-        addKeyword({
-            variables: {
-                name: values.keyword,
-                categoryId: selectedCategory.id
-            }
-        });
-        setIsVisible(false);
-        return null;
-    }
+    ];
 
     return (
         <>
             <Table rowKey="id" columns={columns} dataSource={categories} />
             <Modal
                 title="Add Keyword"
-                visible={isVisible}
+                visible={props.isVisible}
                 footer={null}
-                onCancel={() => setIsVisible(false)}>
+                onCancel={() => props.setIsVisible(false)}>
                     <AddKeywordView
                         add={onSubmitKeyword}
-                        category={selectedCategory}
+                        category={props.selectedCategory}
                     />
             </Modal>
         </>

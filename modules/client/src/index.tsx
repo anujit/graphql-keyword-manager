@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloProvider } from '@apollo/react-hooks';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import App from './containers/App';
 
 const cache = new InMemoryCache();
 const link = new HttpLink({

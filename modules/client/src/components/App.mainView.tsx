@@ -1,6 +1,6 @@
 import React from 'react';
 import {Layout, Alert, Row, Col} from 'antd';
-import CategoryTable from './CategoryTable';
+import CategoryTable from '../containers/CategoryTable';
 import {AddCategoryWrapper} from './AddCategory';
 
 const {Header, Content} = Layout;

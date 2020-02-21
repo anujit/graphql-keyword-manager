@@ -1,8 +1,9 @@
 import React from 'react';
 import {Layout, Spin} from 'antd';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import {GET_CATEGORIES, CREATE_CATEGORY} from '../queries';
-import AppMainView from './App.mainView';
+import {GET_CATEGORIES} from '../queries';
+import {CREATE_CATEGORY} from '../mutations';
+import AppMainView from '../components/App.mainView';
 import '../styles/App.css';
 
 const App: React.FC = () => {
