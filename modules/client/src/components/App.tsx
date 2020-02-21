@@ -8,7 +8,7 @@ import '../styles/App.css';
 const App: React.FC = () => {
   const { loading, error, data } = useQuery(GET_CATEGORIES);
 
-  const [createCategory] = useMutation(CREATE_CATEGORY, {
+  const [createCategory, {loading: categoryLoading}] = useMutation(CREATE_CATEGORY, {
     update(cache, {
       data: {createCategory}
     }) {
@@ -42,7 +42,7 @@ const App: React.FC = () => {
   if (error) return <p>Error in Loading Categories...</p>;
 
   return (
-    <AppMainView data={data} handleAddSubmit={handleAddSubmit} />
+    <AppMainView data={data} categoryLoading={categoryLoading} handleAddSubmit={handleAddSubmit} />
   );
 }
 
