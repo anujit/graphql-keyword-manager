@@ -1,11 +1,29 @@
 import React, {useState} from 'react';
 import { Table, Tag, Modal, Divider } from 'antd';
-import {Category, Keyword} from './CategoryTable';
 import AddKeywordView from './AddKeywordView';
 
 const {confirm} = Modal;
 
-const CategoryTableView: React.FC<any> = (props) => {
+type Category = {
+    name: String,
+    id: String,
+    keywords: Array<Keyword>
+};
+
+type Keyword = {
+    id: string,
+    word: string,
+    score: Number
+};
+
+interface ICategoryTableViewProps {
+    deleteCategory: (arg: any) => any
+    deleteKeyword: (arg: any) => any
+    addKeyword: (arg: any) => any
+    categories: Array<Category>
+}
+
+const CategoryTableView: React.FC<ICategoryTableViewProps> = (props) => {
     const {deleteCategory, deleteKeyword, categories, addKeyword} = props;
     const [isVisible, setIsVisible] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<any>(null);

@@ -8,13 +8,13 @@ interface IKeywordsTableProps {
     categories: Array<Category>
 }
 
-export type Keyword = {
+type Keyword = {
     id: string,
     word: string,
     score: Number
 };
 
-export type Category = {
+type Category = {
     name: String,
     id: String,
     keywords: Array<Keyword>
@@ -32,7 +32,6 @@ const CategoryTable: React.FC<IKeywordsTableProps> = (props) => {
             data: {deleteCategory}
           }) {
             const {categories} = cache.readQuery<any, any>({query: GET_CATEGORIES});
-            console.log(categories, deleteCategory);
             cache.writeQuery({
               query: GET_CATEGORIES,
               data: {

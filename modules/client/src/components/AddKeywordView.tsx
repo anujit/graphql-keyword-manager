@@ -1,10 +1,20 @@
 import React from 'react';
 import { Form, Input, Button, Layout } from 'antd';
-import { Category } from './CategoryTable';
 import {withFormik, FormikErrors, FormikProps} from 'formik';
 
 const {Content} = Layout;
 
+type Category = {
+    name: String,
+    id: String,
+    keywords: Array<Keyword>
+};
+
+type Keyword = {
+    id: string,
+    word: string,
+    score: Number
+};
 interface FormValues {
     keyword: string
 }

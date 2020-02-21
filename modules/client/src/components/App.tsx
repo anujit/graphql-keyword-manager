@@ -5,7 +5,7 @@ import {GET_CATEGORIES, CREATE_CATEGORY} from '../queries';
 import AppMainView from './App.mainView';
 import '../styles/App.css';
 
-const App: React.FC<any> = (props) => {
+const App: React.FC = () => {
   const { loading, error, data } = useQuery(GET_CATEGORIES);
 
   const [createCategory] = useMutation(CREATE_CATEGORY, {

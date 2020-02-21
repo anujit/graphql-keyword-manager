@@ -5,7 +5,12 @@ import {AddCategoryWrapper} from './AddCategory';
 
 const {Header, Content} = Layout;
 
-const AppMainView: React.FC<any> = (props) => {
+interface IAppMainViewProps {
+    data: any
+    handleAddSubmit: (values: any) => any
+}
+
+const AppMainView: React.FC<IAppMainViewProps> = (props) => {
     const {data, handleAddSubmit} = props;
 
     return (
